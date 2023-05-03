@@ -1,0 +1,49 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+participant Main
+participant TargetEnhancer
+participant MethodInterceptor
+participant Method
+participant MethodProxy
+participant TargetFastClass
+participant TargetEnhancerFastClass
+
+
+autonumber
+
+Main -> TargetEnhancer: targetEnhancer.fun2()
+TargetEnhancer -> MethodInterceptor: this.methodInterceptor.invoke(this, method, params, methodProxy)
+MethodInterceptor -> MethodInterceptor: 拦截器前置方法
+
+autonumber 4
+MethodInterceptor -[#red]> Method: method.invoke(target, params)
+Method -[#red]> Method: 反射
+Method -[#red]> Target: target.fun2()
+Target -[#red]> Method: return target
+Method -[#red]> MethodInterceptor: return target
+MethodInterceptor -[#red]> TargetEnhancer: return targetEnhancer
+TargetEnhancer -[#red]> Main: return targetEnhancer
+
+autonumber 4
+MethodInterceptor -[#blue]> MethodProxy: methodProxy.invoke(target, params)
+MethodProxy -[#blue]> TargetFastClass: fastClassInfo.f1.invoke(methodIndex, target, params)
+TargetFastClass -[#blue]> Target: target.fun2()
+Target -[#blue]> TargetFastClass: return target
+TargetFastClass -[#blue]> MethodProxy: return target
+MethodProxy -[#blue]> MethodInterceptor: return targetEnhancer
+MethodInterceptor -[#blue]> TargetEnhancer: return targetEnhancer
+TargetEnhancer -[#blue]> Main: return targetEnhancer
+
+autonumber 4
+MethodInterceptor -[#purple]> MethodProxy: methodProxy.invokeSuper(targetEnhancer, params)
+MethodProxy -[#purple]> TargetEnhancerFastClass: fastClassInfo.f2.invoke(methodIndex, target, params)
+TargetEnhancerFastClass -[#purple]> TargetEnhancer: targetEnhancer.CGLIB$fun2()
+TargetEnhancer -[#purple]> TargetEnhancer: super.fun2()
+TargetEnhancer -[#purple]> TargetEnhancerFastClass: return targetEnhancer
+TargetEnhancerFastClass -[#purple]> MethodProxy: return targetEnhancer
+MethodProxy -[#purple]> MethodInterceptor: return targetEnhancer
+MethodInterceptor -[#purple]> TargetEnhancer: return targetEnhancer
+TargetEnhancer -[#purple]> Main: return targetEnhancer
+
+@enduml

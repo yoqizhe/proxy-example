@@ -1,0 +1,97 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Target {
++fun1()
++fun2()
+}
+
+class TargetEnhancer {
+-CGLIB$CALLBACK_0:MethodInterceptor
++CGLIB$fun1$0(String param): String
++fun1(String param): String
++CGLIB$fun2$0(): Target
++fun2(): Target
+}
+
+interface MethodInterceptor {
++intercept(Object obj, Method method, Object[] args, MethodProxy proxy): Object
+}
+
+class Method {
+}
+
+class MethodProxy {
+-fastClassInfo: FastClassInfo
++invoke()
++invokeSuper()
+}
+
+class FastClassInfo {
+-f1: FastClass
+-f2: FastClass
+}
+
+abstract class FastClass {
+}
+
+class TargetEnhancerFastClass {
++invoke(int var1, Object var2, Object[] var3): Object
+}
+
+class TargetFastClass {
++invoke(int var1, Object var2, Object[] var3): Object
+}
+
+'关系区域
+TargetEnhancer-up-|>Target
+TargetEnhancer-right->MethodInterceptor
+MethodInterceptor..down>MethodProxy
+MethodInterceptor..right>Method
+MethodProxy-down->FastClassInfo
+TargetEnhancerFastClass-up-|>FastClass
+TargetFastClass-up-|>FastClass
+
+FastClassInfo-->TargetEnhancerFastClass
+FastClassInfo-->TargetFastClass
+
+
+'备注区域
+note left of TargetEnhancer::CGLIB$fun1$0
+运行父类fun1方法
+end note
+'
+note left of TargetEnhancer::fun1
+调用MethodInterceptor的方法
+end note
+
+note left of MethodProxy::invoke
+fastClassInfo.f1.invoke()
+end note
+
+note left of MethodProxy::invokeSuper
+fastClassInfo.f2.invoke()
+end note
+
+note left of FastClassInfo::f1
+TargetFastClass
+end note
+
+note left of FastClassInfo::f2
+TargetEnhancerFastClass
+end note
+
+note left of TargetEnhancerFastClass::invoke
+TargetEnhancer var10000 = (TargetEnhancer)var2;
+switch(var1)
+    var10000.fun1()
+end note
+
+note right of TargetFastClass::invoke
+Target var10000 = (Target)var2;
+switch(var1)
+    var10000.fun1()
+end note
+
+
+@enduml

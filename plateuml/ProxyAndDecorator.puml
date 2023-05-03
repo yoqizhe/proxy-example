@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/class-diagram
+title "关联"
+
+class Target {
++fun1()
++fun2()
+}
+
+Target <- Decorator
+Target <- Proxy
+
+class Proxy {
+-target: Target
++fun1()
++fun2()
+}
+
+
+class Decorator {
+-target: Target
++fun1()
++fun2()
+}
+
+newpage
+
+title "继承"
+
+class Target {
++fun1()
++fun2()
+}
+
+Target <|- Decorator
+Target <|- Proxy
+
+class Proxy {
++fun1()
++fun2()
+}
+
+
+class Decorator {
++fun1()
++fun2()
+}
+@enduml

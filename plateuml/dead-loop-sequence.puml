@@ -1,0 +1,32 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+participant Main
+participant TargetEnhancer
+participant MethodInterceptor
+participant MethodProxy
+participant TargetFastClass
+
+
+autonumber
+
+Main -> TargetEnhancer: targetEnhancer.fun2()
+TargetEnhancer -> MethodInterceptor: this.methodInterceptor.invoke(this, method, params, methodProxy)
+MethodInterceptor -> MethodInterceptor: 拦截器前置方法
+
+autonumber 4
+MethodInterceptor -[#blue]> MethodProxy: methodProxy.invoke(target, params)
+MethodProxy -[#blue]> TargetFastClass: fastClassInfo.f1.invoke(methodIndex, target, params)
+TargetFastClass -[#blue]> Target: target.fun2()
+Target -[#blue]> TargetFastClass: return target
+TargetFastClass -[#blue]> MethodProxy: return target
+MethodProxy -[#blue]> MethodInterceptor: return targetEnhancer
+MethodInterceptor -[#blue]> TargetEnhancer: return targetEnhancer
+TargetEnhancer -[#blue]> Main: return targetEnhancer
+
+autonumber 6
+TargetFastClass -[#red]> TargetEnhancer: proxy.fun2()
+
+
+
+@enduml

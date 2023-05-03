@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface Interceptor {
+target: Target
+}
+
+class Target {
+fun1()
+}
+
+class Proxy {
+interceptor: Interceptor
+fun1()
+}
+
+class ProxyFactory {
+create(): Proxy
+}
+
+ProxyFactory --> Proxy: create
+Proxy -> Interceptor: interceptor.invoke(fun1Method)
+Interceptor -> Target: method.invoke(target)
+
+
+@enduml

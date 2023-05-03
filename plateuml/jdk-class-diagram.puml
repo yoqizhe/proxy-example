@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface Intfs {
++fun1(String param): String
++fun2(): Intfs
+}
+
+class Target {
++fun1(String param): String
++fun2(): Intfs
+}
+
+interface InvocationHandler {
++invoke(Object proxy, Method method, Object[] args):Object
+}
+
+class MyInvocation {
+-target: Target
++invoke(Object proxy, Method method, Object[] args):Object
+}
+
+class Method {
+}
+
+class Proxy {
+#h: InvocationHandler
+{static} +newProxyInstance(ClassLoader loader, Class<?>[] interfaces, InvocationHandler h): Object
+}
+
+class TargetProxy {
++fun1(String param): String
++fun2(): Intfs
+}
+
+'relationship
+Target..up|>Intfs
+TargetProxy..up|>Intfs
+TargetProxy--up|>Proxy
+
+MyInvocation..up|>InvocationHandler
+MyInvocation-left->Target
+MyInvocation..right>Method
+
+Proxy..left>Intfs
+Proxy..right>InvocationHandler
+
+@enduml

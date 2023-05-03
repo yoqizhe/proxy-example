@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Main -> TargetProxy: targetProxy.fun2()
+TargetProxy -> MyInvocation: h.invoke(this, method, params)
+MyInvocation -> MyInvocation: 拦截器前置方法
+MyInvocation -> Method: method.invoke(target, params)
+Method -> Method: 反射
+Method -> Target: target.fun2()
+
+Target -> Method: return target
+Method -> MyInvocation: return target
+MyInvocation -> TargetProxy: return targetProxy
+TargetProxy -> Main: return targetProxy
+
+
+Main -> TargetProxy: targetProxy.fun1()
+TargetProxy -> MyInvocation: h.invoke(this, method, params)
+MyInvocation -> MyInvocation: 拦截器前置方法
+MyInvocation -> Method: method.invoke(target, params)
+Method -> Method: 反射
+Method -> Target: target.fun1()
+Target -> Target: this.fun3()
+
+Target -> Method: return "fun1"
+Method -> MyInvocation: return "fun1"
+MyInvocation -> TargetProxy: return "fun1"
+TargetProxy -> Main: return "fun1"
+@enduml

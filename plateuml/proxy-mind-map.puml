@@ -1,0 +1,57 @@
+@startmindmap
+'https://plantuml.com/mindmap-diagram
+
+
+title 代理模式结构
+
+* <&flag>代理模式
+
+'静态代理
+** <&star>静态代理
+***_ 编译期间生成代理类
+***_ 为目标类的每个方法生成不同操作
+
+'关联目标类静态代理
+*** 关联目标类
+****_ target.fun()
+*****_ this->目标类
+
+'继承目标类静态代理
+*** 继承目标类
+****_ super.fun()
+*****_ this->代理类
+
+'动态代理
+** <&pulse>动态代理
+***_ 运行期间生成代理类
+***_ 为目标类的每个方法生成统一操作
+
+'jdk动态代理
+*** jdk动态代理
+****_ Proxy + InvocationHandler = $Proxy0
+****_ 目标类需要实现接口
+
+****_ method.invoke(target)
+*****_ target.fun()
+******_ this->目标类
+
+'cglib动态代理
+*** cglib动态代理
+****_ Enhancer + MethodInterceptor = TargetEnahancer + TargetFastClass + TargetEnhancerFastClass
+
+****_ method.invoke(target)
+*****_ target.fun()
+******_ this->目标类
+
+****_ methodProxy.invoke(target)
+*****_ FastClass索引
+******_ target.fun()
+*******_ this->目标类
+
+****_ methodProxy.invokeSuper(proxy)
+*****_ FastClass索引
+******_ proxy.CGLIB$fun()
+*******_ this->代理类
+
+center footer 代理模式
+@endmindmap
